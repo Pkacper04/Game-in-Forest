@@ -11,6 +11,7 @@ public class Movment : MonoBehaviour
 
     private int jumpNum;
     private bool isGrounded = false;
+    private bool onWall = false;
     private Rigidbody2D rigid;
     private Transform lastTouchedObject;
     // Start is called before the first frame update
@@ -29,32 +30,21 @@ public class Movment : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            numberOfJumps = jumpNum;
-            lastTouchedObject = collision.gameObject.transform;
-        }
-        else if (collision.gameObject.tag == "JumpWall")
-        {
-            if(lastTouchedObject != collision.gameObject.transform)
-                numberOfJumps = 1;
-            lastTouchedObject = collision.gameObject.transform;
-        }
-
-        isGrounded = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        isGrounded = false;
-    }
-
     private void Movement()
     {
         float x = Input.GetAxis("Horizontal");
-        rigid.velocity = new Vector2(x*speed,rigid.velocity.y);
+        if (onWall)
+        {
+            if (lastTouchedObject.position.x > transform.position.x && x <= 0)
+                rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
+            else if (lastTouchedObject.position.x < transform.position.x && x >= 0)
+                rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
+        }
+        else
+        {
+            rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
+        }
+        //Debug.Log(rigid.velocity);
     }
 
 
@@ -71,6 +61,37 @@ public class Movment : MonoBehaviour
         //future animations
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            numberOfJumps = jumpNum;
+            lastTouchedObject = collision.gameObject.transform;
+            onWall = false;
+        }
+        else if (collision.gameObject.tag == "JumpWall")
+        {
+            if (lastTouchedObject != collision.gameObject.transform)
+                numberOfJumps = 1;
+            lastTouchedObject = collision.gameObject.transform;
+            onWall = true;
+        }
+
+        isGrounded = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        onWall = false;
+        isGrounded = false;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            isGrounded = true;
+    }
 
 
 
