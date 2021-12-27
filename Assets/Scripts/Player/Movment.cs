@@ -14,14 +14,13 @@ public class Movment : MonoBehaviour
     private bool onWall = false;
     private Rigidbody2D rigid;
     private Transform lastTouchedObject;
-    // Start is called before the first frame update
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         jumpNum = numberOfJumps;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -44,7 +43,6 @@ public class Movment : MonoBehaviour
         {
             rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
         }
-        //Debug.Log(rigid.velocity);
     }
 
 
