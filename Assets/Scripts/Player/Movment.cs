@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Movment : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float jumpForce = 400f;
+    [SerializeField] private float speed = 700f;
+    [SerializeField] private float jumpForce = 240f;
     [SerializeField] private int numberOfJumps = 1;
 
 
