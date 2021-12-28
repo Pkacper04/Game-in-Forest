@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 941689456}
   m_Layer: 0
   m_Name: Square (3)
-  m_TagString: JumpWall
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1386,11 +1386,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1617162317}
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
-  m_LocalPosition: {x: 8.61, y: 0.82, z: 0}
+  m_LocalPosition: {x: 8.71, y: 0.76, z: 0}
   m_LocalScale: {x: 1, y: 4.379458, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &1678737276
 GameObject:
@@ -1614,7 +1614,7 @@ Transform:
   m_LocalScale: {x: 0.6115976, y: 0.6115976, z: 0.6115976}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1865229909
 GameObject:
