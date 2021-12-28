@@ -3,66 +3,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingWall : MonoBehaviour
+namespace Terrain
 {
-    [SerializeField] private float logDuration = 2f;
-    [SerializeField] private float logRespawnTime = 2f;
-
-    private bool touched = false;
-    private float timer = 0f;
-
-    private SpriteRenderer spriteRenderer;
-    private BoxCollider2D boxCollider;
-
-
-    private void Start()
+    public class FallingWall : MonoBehaviour
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        boxCollider = GetComponent<BoxCollider2D>();
-    }
+        [SerializeField] private float logDuration = 2f;
+        [SerializeField] private float logRespawnTime = 2f;
+
+        private bool touched = false;
+        private float timer = 0f;
+
+        private SpriteRenderer spriteRenderer;
+        private BoxCollider2D boxCollider;
 
 
-    void Update()
-    {
-        timer -= Time.deltaTime;
-        if(touched)
+        private void Start()
         {
-            if (timer <= 0)
-                ColapseLog();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            boxCollider = GetComponent<BoxCollider2D>();
         }
-        else if (!boxCollider.enabled)
+
+
+        void Update()
         {
-            if (timer <= 0)
-                RestoreLog();
+            timer -= Time.deltaTime;
+            if (touched)
+            {
+                if (timer <= 0)
+                    ColapseLog();
+            }
+            else if (!boxCollider.enabled)
+            {
+                if (timer <= 0)
+                    RestoreLog();
+            }
         }
-    }
 
-    private void RestoreLog()
-    {
-        spriteRenderer.enabled = true;
-        boxCollider.enabled = true;
-    }
-
-    private void ColapseLog()
-    {
-        spriteRenderer.enabled = false;
-        boxCollider.enabled = false;
-        WaitForRestor();
-    }
-
-    private void WaitForRestor()
-    {
-        timer = logRespawnTime;
-        touched = false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Player")
+        private void RestoreLog()
         {
-            timer = logDuration;
-            touched = true; 
+            spriteRenderer.enabled = true;
+            boxCollider.enabled = true;
         }
-    }
 
+        private void ColapseLog()
+        {
+            spriteRenderer.enabled = false;
+            boxCollider.enabled = false;
+            WaitForRestor();
+        }
+
+        private void WaitForRestor()
+        {
+            timer = logRespawnTime;
+            touched = false;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                timer = logDuration;
+                touched = true;
+            }
+        }
+
+    }
 }

@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Player;
 
-public class Berry : MonoBehaviour
+namespace Collections
 {
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public class Berry : MonoBehaviour
     {
-        if (collision.tag == "Player")
-            Destroy(gameObject);
+        [SerializeField] private float addedHunger = 20f;
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.tag == "Player")
+            {
+                collision.GetComponent<LowerHunger>().UpdateTime(addedHunger);
+                Destroy(gameObject);
+            }
+        }
     }
 }

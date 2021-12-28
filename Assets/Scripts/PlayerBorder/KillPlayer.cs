@@ -4,32 +4,38 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class KillPlayer : MonoBehaviour
+
+namespace Core
 {
-    [SerializeField] private GameObject gameOverImage;
-
-
-    private void Start()
+    public class KillPlayer : MonoBehaviour
     {
-        gameOverImage.SetActive(false);
+
+        [SerializeField] GameObject gameOverPanel;
+        [SerializeField] GameObject playerHud;
+
+        private void Start()
+        {
+            gameOverPanel.SetActive(false);
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Player")
+                GameOver();
+        }
+
+        internal void GameOver()
+        {
+            GameObject.FindWithTag("Player").SetActive(false);
+            gameOverPanel.SetActive(true);
+            playerHud.SetActive(false);
+        }
+
+        public void RestartGame()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        
+
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-            GameOver();
-    }
-
-    internal void GameOver()
-    {
-        GameObject.FindWithTag("Player").SetActive(false);
-        gameOverImage.SetActive(true);
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-
 }
