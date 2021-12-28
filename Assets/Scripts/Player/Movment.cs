@@ -17,6 +17,9 @@ namespace Player
         private Rigidbody2D rigid;
         private Transform lastTouchedObject;
 
+
+        private bool cheat = false;
+
         void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
@@ -25,6 +28,19 @@ namespace Player
 
         void Update()
         {
+            if(Input.GetKeyDown(KeyCode.G))
+            {
+                cheat = !cheat;
+            }
+
+            if(Input.GetKeyDown(KeyCode.Escape))
+                Application.Quit();
+
+            if(cheat)
+            {
+                numberOfJumps = jumpNum;
+                isGrounded = true;
+            }
             Movement();
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)))
                 Jump();
