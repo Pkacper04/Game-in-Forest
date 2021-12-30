@@ -8,39 +8,39 @@ namespace Player
     {
         [SerializeField] private float speed = 8f;
         [SerializeField] private float jumpForce = 3.5f;
-        [SerializeField] private int numberOfJumps = 1;
 
 
-        private int jumpNum;
-        private bool isGrounded = false;
-        private bool onWall = false;
+        
         private Rigidbody2D rigid;
         private Transform lastTouchedObject;
 
-
+        private bool isGrounded = false;
+        private bool onWall = false;
+        private bool slide = false;
         private bool cheat = false;
 
         void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
-            jumpNum = numberOfJumps;
         }
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.G))
+            if (Input.GetKeyDown(KeyCode.G))//delete leter only for tests
             {
                 cheat = !cheat;
             }
 
-            if(Input.GetKeyDown(KeyCode.Escape))
-                Application.Quit();
-
             if(cheat)
             {
-                numberOfJumps = jumpNum;
-                isGrounded = true;
+                isGrounded = true;// delete leter only for tests
             }
+
+            if(slide)
+            {
+                rigid.velocity = new Vector2(rigid.velocity.x, -jumpForce + jumpForce/2);
+            }
+
             Movement();
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)))
                 Jump();
@@ -50,26 +50,23 @@ namespace Player
         private void Movement()
         {
             float x = Input.GetAxis("Horizontal");
-            if (onWall)
-            {
-                if (lastTouchedObject.position.x > transform.position.x && x <= 0)
-                    rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
-                else if (lastTouchedObject.position.x < transform.position.x && x >= 0)
-                    rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
-            }
-            else
-            {
-                rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
-            }
-        }
+            rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
 
+            if (rigid.velocity.y > jumpForce * 2f)
+                rigid.velocity = new Vector2(rigid.velocity.x, jumpForce * 2f);
+        }
+        
 
         private void Jump()
         {
-            if (numberOfJumps > 0 && isGrounded)
+            if (isGrounded)
             {
-                rigid.AddForce(new Vector2(0, jumpForce));
-                numberOfJumps--;
+                if(slide)
+                    rigid.AddForce(new Vector2(0, jumpForce*2f));
+                else
+                    rigid.AddForce(new Vector2(0, jumpForce));
+                isGrounded = false;
+                slide = false;
             }
         }
 
@@ -83,25 +80,23 @@ namespace Player
         {
             if (collision.gameObject.tag == "Ground")
             {
-                numberOfJumps = jumpNum;
                 lastTouchedObject = collision.gameObject.transform;
-                onWall = false;
+                isGrounded = true;
             }
             else if (collision.gameObject.tag == "JumpWall")
             {
+                slide = true;
                 if (lastTouchedObject != collision.gameObject.transform)
-                    numberOfJumps = 1;
+                    isGrounded = true;
                 lastTouchedObject = collision.gameObject.transform;
-                onWall = true;
             }
 
-            isGrounded = true;
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            onWall = false;
             isGrounded = false;
+            slide = false;
         }
 
         private void OnCollisionStay2D(Collision2D collision)
@@ -109,6 +104,8 @@ namespace Player
             if (collision.gameObject.tag == "Ground")
                 isGrounded = true;
         }
+
+
 
 
 
