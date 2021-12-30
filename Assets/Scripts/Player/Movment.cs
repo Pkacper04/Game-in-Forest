@@ -15,7 +15,6 @@ namespace Player
         private Transform lastTouchedObject;
 
         private bool isGrounded = false;
-        private bool onWall = false;
         private bool slide = false;
         private bool cheat = false;
 
