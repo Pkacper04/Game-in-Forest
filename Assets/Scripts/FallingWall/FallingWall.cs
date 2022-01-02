@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Terrain
+namespace Game.Terrain
 {
     public class FallingWall : MonoBehaviour
     {

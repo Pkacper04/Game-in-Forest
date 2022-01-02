@@ -1,27 +1,41 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Core;
+using Game.Core;
+using Game.SaveLoadSystem;
+using Game.Collections;
 
-
-namespace Player
+namespace Game.PlayerInfo
 {
-    public class LowerHunger : MonoBehaviour
+    public class Player : MonoBehaviour
     {
+
         [SerializeField] private Image hungerImage;
         [SerializeField, Tooltip("1 value is equal to 1 minute")] private float hungerTime = 5f;
 
-        private float time;
+        internal float time;
         private KillPlayer gameover;
 
-        // Start is called before the first frame update
-        void Start()
+
+        private void OnEnable()
         {
             gameover = GameObject.FindWithTag("GameOver").GetComponent<KillPlayer>();
             hungerImage.fillAmount = 1;
             hungerTime *= 60f;
             time = hungerTime;
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            PlayerData data = SaveSystem.LoadPlayer();
+            if (data != null)
+            {
+                time = data.hungerTime;
+                transform.position = new Vector2(data.positionX, data.positionY);
+
+            }
+
         }
 
         // Update is called once per frame
@@ -44,3 +58,7 @@ namespace Player
         }
     }
 }
+
+
+
+

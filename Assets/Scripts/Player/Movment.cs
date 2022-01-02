@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player
+namespace Game.PlayerInfo
 {
     public class Movment : MonoBehaviour
     {
@@ -10,13 +10,14 @@ namespace Player
         [SerializeField] private float jumpForce = 3.5f;
 
 
-        
+
         private Rigidbody2D rigid;
         private Transform lastTouchedObject;
 
         private bool isGrounded = false;
         private bool slide = false;
         private bool cheat = false;
+
 
         void Start()
         {
@@ -30,14 +31,14 @@ namespace Player
                 cheat = !cheat;
             }
 
-            if(cheat)
+            if (cheat)
             {
                 isGrounded = true;// delete leter only for tests
             }
 
-            if(slide)
+            if (slide)
             {
-                rigid.velocity = new Vector2(rigid.velocity.x, -jumpForce + jumpForce/2);
+                rigid.velocity = new Vector2(rigid.velocity.x, -jumpForce + jumpForce / 2);
             }
 
             Movement();
@@ -54,14 +55,14 @@ namespace Player
             if (rigid.velocity.y > jumpForce * 2f)
                 rigid.velocity = new Vector2(rigid.velocity.x, jumpForce * 2f);
         }
-        
+
 
         private void Jump()
         {
             if (isGrounded)
             {
-                if(slide)
-                    rigid.AddForce(new Vector2(0, jumpForce*2f));
+                if (slide)
+                    rigid.AddForce(new Vector2(0, jumpForce * 2f));
                 else
                     rigid.AddForce(new Vector2(0, jumpForce));
                 isGrounded = false;
@@ -107,6 +108,6 @@ namespace Player
 
 
 
-
     }
 }
+

@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using Game.SaveLoadSystem;
 
 
-namespace Core
+namespace Game.Core
 {
     public class KillPlayer : MonoBehaviour
     {
@@ -33,6 +31,12 @@ namespace Core
 
         public void RestartGame()
         {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public void HardRestart()
+        {
+            SaveSystem.DeleteCheckpoint();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         

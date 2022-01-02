@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FinishLevel : MonoBehaviour
-{
-    [SerializeField] private string levelName = "null";
-    [SerializeField] private int levelIndex = -1;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+namespace Game.Core
+{
+    public class FinishLevel : MonoBehaviour
     {
-        if (collision.gameObject.tag == "Player")
+        [SerializeField] private string levelName = "null";
+        [SerializeField] private int levelIndex = -1;
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (levelName != "null")
-                SceneManager.LoadScene(levelName);
-            else if (levelIndex != -1)
-                SceneManager.LoadScene(levelIndex);
-            else
+            if (collision.gameObject.tag == "Player")
             {
-                Debug.LogError("Podaj index sceny albo nazwe poziomu");
+                if (levelName != "null")
+                    SceneManager.LoadScene(levelName);
+                else if (levelIndex != -1)
+                    SceneManager.LoadScene(levelIndex);
+                else
+                {
+                    Debug.LogError("Podaj index sceny albo nazwe poziomu");
+                }
             }
         }
     }
