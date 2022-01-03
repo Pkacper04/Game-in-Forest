@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Game.Core;
 using Game.SaveLoadSystem;
 using Game.Collections;
+using System;
 
 namespace Game.PlayerInfo
 {
@@ -17,25 +18,26 @@ namespace Game.PlayerInfo
         private KillPlayer gameover;
 
 
-        private void OnEnable()
+        // Start is called before the first frame update
+        void Start()
         {
             gameover = GameObject.FindWithTag("GameOver").GetComponent<KillPlayer>();
             hungerImage.fillAmount = 1;
             hungerTime *= 60f;
             time = hungerTime;
+            LoadData();
         }
 
-        // Start is called before the first frame update
-        void Start()
+        private void LoadData()
         {
             PlayerData data = SaveSystem.LoadPlayer();
             if (data != null)
             {
                 time = data.hungerTime;
-                transform.position = new Vector2(data.positionX, data.positionY);
-
+                transform.position = new Vector2(data.positionX-2f, data.positionY);
             }
-
+            else
+                return;
         }
 
         // Update is called once per frame

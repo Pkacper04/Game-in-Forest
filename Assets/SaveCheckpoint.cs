@@ -7,15 +7,19 @@ namespace Game.SaveLoadSystem
 {
     public class SaveCheckpoint : MonoBehaviour
     {
-        internal bool visited = false;
+        public bool visited = false;
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.tag == "Player" && !visited)
+            if (!visited && collision.gameObject.tag == "Player" )
             {
                 visited = true;
                 SaveSystem.SavePlayer(collision.GetComponent<Player>());
             }
         }
+
+
+
     }
 }

@@ -7,8 +7,7 @@ namespace Game.SaveLoadSystem
 {
     public class CollectiblesLoading : MonoBehaviour
     {
-        private List<float> savedPositionX;
-        private void Awake()
+        private void Start()
         {
             PlayerData data = SaveSystem.LoadPlayer();
 
@@ -19,29 +18,34 @@ namespace Game.SaveLoadSystem
 
                 GameObject[] Berrys = GameObject.FindGameObjectsWithTag("Berry");
 
-                SortedList<int, int> Berryid = new SortedList<int, int>();
+                List<int> Berryid = new List<int>();
 
                 for (int i = 0; i < Berrys.Length; i++)
-                    Berryid.Add(i, Berrys[i].GetComponent<Berry>().id);
+                    Berryid.Add(Berrys[i].GetComponent<Berry>().id);
 
                 for (int i = 0; i < Berryid.Capacity; i++)
+                {
                     if (!berryid.Contains(Berryid[i]))
+                    {
                         Destroy(Berrys[i]);
+                    }
+                }
                 #endregion BerryLoading
 
-                #region CheckpointsLoading
+                #region CheckpointLoading
+
+                List<float> checkpointX = new List<float>(data.checkpointX);
 
                 GameObject[] checkpoints = GameObject.FindGameObjectsWithTag("Respawn");
-                
 
-                if (data.checkpointX.Length > 0)
-                    savedPositionX = new List<float>(data.checkpointX);
+                foreach (var item in checkpoints)
+                {
+                    if(checkpointX.Contains(item.transform.position.x))
+                        item.GetComponent<SaveCheckpoint>().visited = true;
+                }
 
-                foreach (GameObject value in checkpoints)
-                    if (savedPositionX.Contains(value.transform.position.x))
-                        value.GetComponent<BoxCollider2D>().enabled = false;
+                #endregion CheckpointLoading
 
-                #endregion CheckpointsLoading
 
             }
         }

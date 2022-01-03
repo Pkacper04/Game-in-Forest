@@ -12,7 +12,6 @@ public class PlayerData
     public float hungerTime;
     public float positionX;
     public float positionY;
-    public float positionZ;
     public int[] berryIDS = new int[0];
     public float[] checkpointX = new float[0];
 
@@ -34,21 +33,15 @@ public class PlayerData
 
         GameObject[] checkpoints = GameObject.FindGameObjectsWithTag("Respawn");
 
-        
         for (int i = 0; i < checkpoints.Length; i++)
         {
+            Array.Resize<float>(ref checkpointX, checkpointX.Length + 1);
             if (checkpoints[i].GetComponent<SaveCheckpoint>().visited)
             {
-                
-                Array.Resize<float>(ref checkpointX, checkpointX.Length + 1);
-                Debug.Log(checkpointX.Length);
                 checkpointX[i] = checkpoints[i].transform.position.x;
             }
         }
         
-
-
-
 
     }
 
