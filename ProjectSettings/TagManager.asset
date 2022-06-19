@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - JumpWall
   - GameOver
+  - FoodController
   layers:
   - Default
   - TransparentFX

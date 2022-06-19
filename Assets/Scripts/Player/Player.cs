@@ -5,6 +5,7 @@ using Game.Core;
 using Game.SaveLoadSystem;
 using Game.Collections;
 using System;
+using NaughtyAttributes; 
 
 namespace Game.PlayerInfo
 {
@@ -12,7 +13,7 @@ namespace Game.PlayerInfo
     {
 
         [SerializeField] private Image hungerImage;
-        [SerializeField, Tooltip("1 value is equal to 1 minute")] private float hungerTime = 5f;
+        [SerializeField, InfoBox("HungerTime = 1 value is equal 1 minute")] private float hungerTime = 5f;
 
         internal float time;
         private KillPlayer gameover;
@@ -57,6 +58,12 @@ namespace Game.PlayerInfo
                 time += duration;
             else
                 time = hungerTime;
+        }
+
+        [ContextMenu("gameOver")]
+        public void EndGame()
+        {
+            gameover.GameOver();
         }
     }
 }

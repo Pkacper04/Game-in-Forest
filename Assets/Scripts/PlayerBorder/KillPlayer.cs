@@ -36,7 +36,7 @@ namespace Game.Core
 
         public void HardRestart()
         {
-            SaveSystem.DeleteCheckpoint();
+            SaveSystem.DeleteAllSave();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         

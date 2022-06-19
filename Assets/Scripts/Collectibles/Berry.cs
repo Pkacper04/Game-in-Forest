@@ -2,49 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.PlayerInfo;
-
+using NaughtyAttributes;
 
 namespace Game.Collections
 {
     public class Berry : MonoBehaviour
     {
         [SerializeField] private float addedHunger = 20f;
+        [SerializeField, Tag] private string playerTag;
 
-        static bool done = false;
-        static int ids = 0;
-
-
-        public int id = 0;
-
-
-        private void Awake()
-        {
-            if (!done)
-            {
-                GameObject[] objects = GameObject.FindGameObjectsWithTag("Berry");
-                foreach (GameObject item in objects)
-                {
-                    item.GetComponent<Berry>().id = ids;
-                    ids++;
-                }
-                done = true;
-            }
-        }
+        [SerializeField]
+        private CollectiblesLoading controller;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.tag == "Player")
+            if (collision.tag == playerTag)
             {
                 collision.GetComponent<Player>().UpdateTime(addedHunger);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+                controller.PickUp(this);
             }
         }
 
-        private void OnDestroy()
-        {
-            done = false;
-            ids = 0;
-        }
+        public void Collected() => gameObject.SetActive(false);
 
     }
 }
