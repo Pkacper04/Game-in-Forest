@@ -240,7 +240,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addedHunger: 20
+  playerHunger: {fileID: 0}
   playerTag: Player
+  bodyTag: PlayerBody
   controller: {fileID: 0}
 --- !u!1001 &6108031903487168910
 PrefabInstance:

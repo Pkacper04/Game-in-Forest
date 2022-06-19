@@ -9,7 +9,7 @@ public class PlayerData
     public float positionY;
 
         
-    public PlayerData(Player player)
+    public PlayerData(PlayerHunger player)
     {
         hungerTime = player.time;
         positionX = player.transform.position.x;

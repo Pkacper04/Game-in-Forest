@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using NaughtyAttributes;
 
 namespace Game.Core
 {
     public class FinishLevel : MonoBehaviour
     {
-        [SerializeField] private string levelName = "null";
-        [SerializeField] private int levelIndex = -1;
+        [SerializeField,Scene] private string levelName;
+        [SerializeField, Tag] private string playerTag;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.tag == "Player")
+            if (collision.gameObject.tag == playerTag)
             {
-                if (levelName != "null")
-                    SceneManager.LoadScene(levelName);
-                else if (levelIndex != -1)
-                    SceneManager.LoadScene(levelIndex);
-                else
-                {
-                    Debug.LogError("Podaj index sceny albo nazwe poziomu");
-                }
+                SceneManager.LoadScene(levelName);
             }
         }
     }

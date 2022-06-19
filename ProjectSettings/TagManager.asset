@@ -8,6 +8,8 @@ TagManager:
   - JumpWall
   - GameOver
   - FoodController
+  - Berry
+  - PlayerBody
   layers:
   - Default
   - TransparentFX

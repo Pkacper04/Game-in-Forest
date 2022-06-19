@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
+using Game.SaveLoadSystem;
 
 namespace Game.PlayerInfo
 {
@@ -8,65 +8,96 @@ namespace Game.PlayerInfo
     {
         [SerializeField] private float speed = 8f;
         [SerializeField] private float jumpForce = 3.5f;
+        [SerializeField] private float wallJumpForce = 7f;
+        [SerializeField] private float onWallGravity;
+        [SerializeField] private float slideDown;
 
 
-
+        [SerializeField]
         private Rigidbody2D rigid;
+
+        [SerializeField]
+        private CapsuleCollider2D bodyCollider;
+
+        [ShowNonSerializedField]
         private Transform lastTouchedObject;
 
+        [ShowNonSerializedField]
         private bool isGrounded = false;
+        [ShowNonSerializedField]
         private bool slide = false;
+        [ShowNonSerializedField]
         private bool cheat = false;
 
+        private bool onContact = false;
+        private float blockMovement = 0;
+        private Vector2 movingDirection;
 
-        void Start()
+
+        private void Start()
         {
-            rigid = GetComponent<Rigidbody2D>();
+            
+            PlayerData data = SaveSystem.LoadPlayer();
+            if (data != null)
+                transform.position = new Vector2(data.positionX, data.positionY);
         }
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.G))//delete leter only for tests
-            {
                 cheat = !cheat;
-            }
-
             if (cheat)
-            {
                 isGrounded = true;// delete leter only for tests
-            }
-
-            if (slide)
-            {
-                rigid.velocity = new Vector2(rigid.velocity.x, -jumpForce + jumpForce / 2);
-            }
 
             Movement();
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)))
-                Jump();
+            if ((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)))
+                Jumping();
         }
 
 
         private void Movement()
         {
             float x = Input.GetAxis("Horizontal");
-            rigid.velocity = new Vector2(x * speed, rigid.velocity.y);
 
-            if (rigid.velocity.y > jumpForce * 2f)
+            if (rigid.velocity.y > Mathf.Max(wallJumpForce,jumpForce))
                 rigid.velocity = new Vector2(rigid.velocity.x, jumpForce * 2f);
+
+            movingDirection = new Vector2(x * speed, rigid.velocity.y);
+
+            if (slide)
+            {
+                Sliding();
+                return;
+            }
+
+            rigid.velocity = movingDirection;
         }
 
 
-        private void Jump()
+        private void Jumping()
         {
             if (isGrounded)
+                rigid.AddForce(new Vector2(0, jumpForce));
+            else if (slide)
             {
-                if (slide)
-                    rigid.AddForce(new Vector2(0, jumpForce * 2f));
-                else
-                    rigid.AddForce(new Vector2(0, jumpForce));
-                isGrounded = false;
-                slide = false;
+                if (blockMovement * movingDirection.x > 0)
+                    return;
+                rigid.velocity = movingDirection;
+                rigid.AddForce(new Vector2(0, wallJumpForce));
+            }
+
+            isGrounded = false;
+            slide = false;
+        }
+
+        private void Sliding()
+        {
+            if (rigid.velocity.y < 0)
+                rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y * onWallGravity);
+
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y - slideDown);
             }
         }
 
@@ -76,8 +107,16 @@ namespace Game.PlayerInfo
         }
 
 
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            if (onContact)
+                return;
+            if (collision.otherCollider == bodyCollider)
+                return;
+
+            Debug.Log("enter collision");
+
             if (collision.gameObject.tag == "Ground")
             {
                 lastTouchedObject = collision.gameObject.transform;
@@ -85,9 +124,14 @@ namespace Game.PlayerInfo
             }
             else if (collision.gameObject.tag == "JumpWall")
             {
-                slide = true;
+                if(collision.transform.position.x > transform.position.x)
+                    blockMovement = 1;
+                else
+                    blockMovement = -1;
+
+                isGrounded = false;
                 if (lastTouchedObject != collision.gameObject.transform)
-                    isGrounded = true;
+                    slide = true;
                 lastTouchedObject = collision.gameObject.transform;
             }
 
@@ -95,17 +139,35 @@ namespace Game.PlayerInfo
 
         private void OnCollisionExit2D(Collision2D collision)
         {
+            if (onContact)
+                return;
+            Debug.Log("exit collision");
+            Debug.Log("exit collider: "+collision.otherCollider.name);
+            if (collision.otherCollider == bodyCollider)
+                return;
+            blockMovement = 0;
             isGrounded = false;
             slide = false;
         }
 
-        private void OnCollisionStay2D(Collision2D collision)
+
+
+        private void OnTriggerStay2D(Collider2D collision)
         {
+            lastTouchedObject = collision.gameObject.transform;
             if (collision.gameObject.tag == "Ground")
+            {
+                onContact = true;
                 isGrounded = true;
+                slide = false;
+                blockMovement = 0;
+            }
         }
 
-
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            onContact = false;
+        }
 
 
     }

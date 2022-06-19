@@ -136,6 +136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addedHunger: 20
+  playerTag: Player
+  bodyTag: PlayerBody
+  controller: {fileID: 0}
 --- !u!95 &8779387630917167391
 Animator:
   serializedVersion: 3

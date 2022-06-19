@@ -8,7 +8,7 @@ namespace Game.SaveLoadSystem
 {
     public static class SaveSystem
     {
-        public static void SaveGame(Player player, CollectiblesLoading collections, CheckpointController controller)
+        public static void SaveGame(PlayerHunger player, CollectiblesLoading collections, CheckpointController controller)
         {
             SavePlayer(player);
             SaveLevel(collections,controller);
@@ -66,7 +66,7 @@ namespace Game.SaveLoadSystem
 
 
 
-        private static void SavePlayer(Player player)
+        private static void SavePlayer(PlayerHunger player)
         {
             BinaryFormatter formatter = new BinaryFormatter();
 

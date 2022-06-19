@@ -98,6 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logDuration: 0.5
   logRespawnTime: 2
+  playerTag: Player
+  logRenderer: {fileID: 7691449868822947324}
+  logCollider: {fileID: 7691449868822947326}
 --- !u!61 &7691449868822947326
 BoxCollider2D:
   m_ObjectHideFlags: 0

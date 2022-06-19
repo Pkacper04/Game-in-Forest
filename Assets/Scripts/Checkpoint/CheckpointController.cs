@@ -13,7 +13,7 @@ public class CheckpointController : MonoBehaviour
     private CollectiblesLoading collectibles;
 
     [SerializeField]
-    private Player player;
+    private PlayerHunger player;
 
 
 
@@ -22,9 +22,8 @@ public class CheckpointController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-
         LevelData data = SaveSystem.LoadLevel();
 
         if (data != null)
@@ -42,7 +41,6 @@ public class CheckpointController : MonoBehaviour
                 visitedCheckpoints.Add(false);
             }
         }
-
     }
 
     public void Visited(SaveCheckpoint checkpoint)
